@@ -33,7 +33,6 @@ class GetTopAlbumsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /get_top_albums/1 or /get_top_albums/1.json
   def update
     respond_to do |format|
       if @get_top_album.update(get_top_album_params)
@@ -46,7 +45,6 @@ class GetTopAlbumsController < ApplicationController
     end
   end
 
-  # DELETE /get_top_albums/1 or /get_top_albums/1.json
   def destroy
     @get_top_album.destroy!
 
