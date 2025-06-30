@@ -1,12 +1,11 @@
 class GetTopAlbumsController < ApplicationController
   before_action :set_get_top_album, only: %i[ show edit update destroy ]
 
-  # GET /get_top_albums or /get_top_albums.json
   def index
     @get_top_albums = GetTopAlbum.all
+    render :index
   end
 
-  # GET /get_top_albums/1 or /get_top_albums/1.json
   def show
   end
 
