@@ -1,5 +1,5 @@
 class TopAlbumsController < ApplicationController
-  before_action :set_top_album, only: %i[ show edit update destroy ]
+  before_action only: %i[ show edit update destroy ]
 
   def index
     @top_albums = TopAlbum.all
@@ -9,13 +9,18 @@ class TopAlbumsController < ApplicationController
   def show
   end
 
-  # GET /top_albums/new
   def new
     @top_album = TopAlbum.new
   end
 
-  # GET /top_albums/1/edit
   def edit
+    fetch = LastfmFetcher.get_album_data("Frogdunker")
+    render JSON: fetch
+    p fetch
+    # @top_album = TopAlbum.find_by(id: params[:id])
+    # @top_album.update (
+
+    # )
   end
 
   # POST /top_albums or /top_albums.json
@@ -53,15 +58,4 @@ class TopAlbumsController < ApplicationController
       format.json { head :no_content }
     end
   end
-
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_top_album
-      @top_album = GetTopAlbum.find(params.expect(:id))
-    end
-
-    # Only allow a list of trusted parameters through.
-    def top_album_params
-      params.fetch(:top_album, {})
-    end
 end
