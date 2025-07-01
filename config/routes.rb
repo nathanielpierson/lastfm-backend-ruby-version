@@ -3,9 +3,9 @@ Rails.application.routes.draw do
 
   get "up" => "rails/health#show", as: :rails_health_check
 
-  get "get-top-albums" => "get-top-albums#index"
-  get "get-top-albums/:id" => "get-top-albums#show"
-  post "get-top-albums" => "get-top-albums#create"
-  patch "get-top-albums/:id" => "get-top-albums#edit"
-  delete "get-top-albums/:id" => "get-top-albums#destroy"
+  get "top-albums" => "top_albums#index"
+  get "top-albums/:id" => "top_albums#show"
+  post "top-albums" => "top_albums#create"
+  patch "top-albums/:id" => "top_albums#edit"
+  delete "top-albums/:id" => "top_albums#destroy"
 end
