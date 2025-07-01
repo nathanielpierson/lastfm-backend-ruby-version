@@ -1,1 +1,0 @@
-json.title top_album.title

@@ -2,7 +2,7 @@ class TopAlbumsController < ApplicationController
   before_action :set_top_album, only: %i[ show edit update destroy ]
 
   def index
-    @top_albums = GetTopAlbum.all
+    @top_albums = TopAlbum.all
     render :index
   end
 
@@ -11,7 +11,7 @@ class TopAlbumsController < ApplicationController
 
   # GET /top_albums/new
   def new
-    @top_album = GetTopAlbum.new
+    @top_album = TopAlbum.new
   end
 
   # GET /top_albums/1/edit
@@ -20,7 +20,7 @@ class TopAlbumsController < ApplicationController
 
   # POST /top_albums or /top_albums.json
   def create
-    @top_album = GetTopAlbum.new(top_album_params)
+    @top_album = TopAlbum.new(top_album_params)
 
     respond_to do |format|
       if @top_album.save

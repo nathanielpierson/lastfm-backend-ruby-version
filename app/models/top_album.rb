@@ -1,0 +1,2 @@
+class TopAlbum < ApplicationRecord
+end
