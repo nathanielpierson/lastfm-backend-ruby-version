@@ -1,8 +1,8 @@
 require "uri"
 require "http"
-require "dotenv/load"
-
-
+# require "dotenv/load"
+# require "rails"
+require_relative "../../config/environment"
 class LastfmFetcher
   BASE_URL = "http://ws.audioscrobbler.com/2.0/"
 
@@ -12,11 +12,11 @@ class LastfmFetcher
       user: user,
       period: period,
       # limit: params[:limit],
-      api_key: ENV["LASTFM_API_KEY"],
+      api_key: Rails.application.credentials.dig(:api_key),
       format: "json"
     })
-    albums = response.parse
-    p albums["topalbums"]["album"][1]["playcount"]
+    p albums = response.parse
+    # p albums["topalbums"]["album"][1]["playcount"]
     # if response.status.success?
     #   JSON.parse(response.body.to_s)
     # else
@@ -25,4 +25,4 @@ class LastfmFetcher
   end
 end
 
-x = LastfmFetcher.get_album_data("Frogdunker", "6month")
+x = LastfmFetcher.get_album_data("Frogdunker", "1month")
