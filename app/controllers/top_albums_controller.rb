@@ -14,17 +14,34 @@ class TopAlbumsController < ApplicationController
   end
 
   def edit
+    totalFetchArray = []
+    fetchOverall = LastfmFetcher.get_album_data("Frogdunker", "overall")
+    totalFetchArray.push(fetchOverall)
     fetchOneWeek = LastfmFetcher.get_album_data("Frogdunker", "7day")
+    totalFetchArray.push(fetchOneWeek)
     fetchOneMonth = LastfmFetcher.get_album_data("Frogdunker", "1month")
+    totalFetchArray.push(fetchOneMonth)
     fetchThreeMonth = LastfmFetcher.get_album_data("Frogdunker", "3month")
+    totalFetchArray.push(fetchThreeMonth)
     fetchSixMonth = LastfmFetcher.get_album_data("Frogdunker", "6month")
+    totalFetchArray.push(fetchSixMonth)
     fetchTwelveMonth = LastfmFetcher.get_album_data("Frogdunker", "12month")
-    if Artist.find_by(name: "Savant")
-      p "Im a savant"
+    totalFetchArray.push(fetchTwelveMonth)
+    y = 0 # increment for fetchSixMonth
+    fetchesFetched = 0
+    while fetchesFetched <= 5
+      while y < totalFetchArray[fetchesFetched]["topalbums"]["album"].length
+        if Artist.find_by(name: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["artist"]["name"])
+        else
+          Artist.create(
+            name: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["artist"]["name"]
+          )
+        end
+      y += 1
+      end
+      fetchesFetched += 1
+      y = 0
     end
-
-    p fetchTwelveMonth["topalbums"]["album"][1]["name"]
-    p fetchTwelveMonth["topalbums"]["album"][1]["playcount"]
 
     # @top_album = TopAlbum.find_by(id: params[:id])
     # @top_album.update (
