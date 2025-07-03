@@ -14,21 +14,23 @@ class TopAlbumsController < ApplicationController
   end
 
   def edit
-    fetchOneWeek = LastfmFetcherController.get_album_data("Frogdunker", "7day")
-    fetchOneMonth = LastfmFetcherController.get_album_data("Frogdunker", "1month")
-    fetchThreeMonth = LastfmFetcherController.get_album_data("Frogdunker", "3month")
-    fetchSixMonth = LastfmFetcherController.get_album_data("Frogdunker", "6month")
-    fetchTwelveMonth = LastfmFetcherController.get_album_data("Frogdunker", "12month")
+    fetchOneWeek = LastfmFetcher.get_album_data("Frogdunker", "7day")
+    fetchOneMonth = LastfmFetcher.get_album_data("Frogdunker", "1month")
+    fetchThreeMonth = LastfmFetcher.get_album_data("Frogdunker", "3month")
+    fetchSixMonth = LastfmFetcher.get_album_data("Frogdunker", "6month")
+    fetchTwelveMonth = LastfmFetcher.get_album_data("Frogdunker", "12month")
+    if Artist.find_by(name: "Savant")
+      p "Im a savant"
+    end
 
     p fetchTwelveMonth["topalbums"]["album"][1]["name"]
     p fetchTwelveMonth["topalbums"]["album"][1]["playcount"]
 
-    @top_album = TopAlbum.find_by(id: params[:id])
+    # @top_album = TopAlbum.find_by(id: params[:id])
     # @top_album.update (
     # )
   end
 
-  # POST /top_albums or /top_albums.json
   def create
     @top_album = TopAlbum.new(top_album_params)
 

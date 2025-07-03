@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   get "top-albums" => "top_albums#index"
   get "top-albums/:id" => "top_albums#show"
-  get "/fetchtest" => "lastfm_fetcher#get_album_data"
+  get "/fetchtest" => "top_albums#edit"
   post "top-albums" => "top_albums#create"
   patch "top-albums/:id" => "top_albums#edit"
   delete "top-albums/:id" => "top_albums#destroy"
