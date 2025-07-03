@@ -1,5 +1,5 @@
 json.title top_album.title
-json.artist_name top_album.artist_name
+json._artist_id top_album._artist_id
 json.one_week top_album.one_week
 json.one_month top_album.one_month
 json.three_month top_album.three_month

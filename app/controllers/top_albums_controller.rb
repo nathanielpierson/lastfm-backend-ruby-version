@@ -27,25 +27,32 @@ class TopAlbumsController < ApplicationController
     totalFetchArray.push(fetchSixMonth)
     fetchTwelveMonth = LastfmFetcher.get_album_data("Frogdunker", "12month")
     totalFetchArray.push(fetchTwelveMonth)
-    y = 0 # increment for fetchSixMonth
+    y = 0
     fetchesFetched = 0
+    # this loop checks for artists to see if they're already in database and creates an Artist row if they're not
     while fetchesFetched <= 5
       while y < totalFetchArray[fetchesFetched]["topalbums"]["album"].length
-        if Artist.find_by(name: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["artist"]["name"])
-        else
-          Artist.create(
+        if Artist.find_by(name: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["artist"]["name"]) == nil
+          @artist = Artist.create(
             name: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["artist"]["name"]
           )
+            TopAlbum.create(
+            title: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"],
+            artist_id: @artist.id
+          )
+        elsif
+            TopAlbum.where(artist_id == @artist.id && totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"]) == nil
+          TopAlbum.create(
+            title: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"],
+            artist_id: @artist.id
+          )
         end
+          p totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"]
       y += 1
       end
       fetchesFetched += 1
       y = 0
     end
-
-    # @top_album = TopAlbum.find_by(id: params[:id])
-    # @top_album.update (
-    # )
   end
 
   def create
