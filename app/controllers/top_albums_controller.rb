@@ -30,22 +30,52 @@ class TopAlbumsController < ApplicationController
     y = 0
     fetchesFetched = 0
     # this loop checks for artists to see if they're already in database and creates an Artist row if they're not
-    while fetchesFetched <= 5
+    while fetchesFetched < totalFetchArray.length
       while y < totalFetchArray[fetchesFetched]["topalbums"]["album"].length
-        if Artist.find_by(name: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["artist"]["name"]) == nil
+        if Artist.find_by(name: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["artist"]["name"]) == []
           @artist = Artist.create(
             name: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["artist"]["name"]
           )
-            TopAlbum.create(
+            puts "first album create"
+            @album = TopAlbum.create(
             title: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"],
             artist_id: @artist.id
           )
         elsif
-            TopAlbum.where(artist_id == @artist.id && totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"]) == nil
-          TopAlbum.create(
+          # Checks to make sure there isn't already an album with this name, then creates one if there isn't
+          TopAlbum.where(title: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"]) == []
+            puts "second album create"
+            @album = TopAlbum.create(
             title: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"],
-            artist_id: @artist.id
+            # artist_id: @artist.id
           )
+        else
+          @album = TopAlbum.where(title: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"])
+          if fetchesFetched == 0
+            @album.update(
+            play_count_total: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["playcount"]
+          )
+          elsif fetchesFetched == 1
+            @album.update(
+            one_week: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["playcount"]
+          )
+          elsif fetchesFetched == 2
+            @album.update(
+            one_month: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["playcount"]
+          )
+          elsif fetchesFetched == 3
+            @album.update(
+            three_month: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["playcount"]
+          )
+          elsif fetchesFetched == 4
+            @album.update(
+            six_month: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["playcount"]
+          )
+          elsif fetchesFetched == 5
+            @album.update(
+            twelve_month: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["playcount"]
+          )
+          end
         end
           p totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"]
       y += 1
