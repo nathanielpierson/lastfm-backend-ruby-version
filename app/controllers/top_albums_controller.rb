@@ -32,7 +32,7 @@ class TopAlbumsController < ApplicationController
     # this loop checks for artists to see if they're already in database and creates an Artist row if they're not
     while fetchesFetched < totalFetchArray.length
       while y < totalFetchArray[fetchesFetched]["topalbums"]["album"].length
-        if Artist.find_by(name: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["artist"]["name"]) == []
+        if Artist.where(name: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["artist"]["name"]) == []
           @artist = Artist.create(
             name: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["artist"]["name"]
           )
@@ -45,6 +45,7 @@ class TopAlbumsController < ApplicationController
           TopAlbum.where(title: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"]) == []
             @album = TopAlbum.create(
             title: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"],
+            # artist_id: @artist.id
             # need to add artist_id to this create statement
           )
         else
