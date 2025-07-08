@@ -36,7 +36,6 @@ class TopAlbumsController < ApplicationController
           @artist = Artist.create(
             name: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["artist"]["name"]
           )
-            puts "first album create"
             @album = TopAlbum.create(
             title: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"],
             artist_id: @artist.id
@@ -44,12 +43,12 @@ class TopAlbumsController < ApplicationController
         elsif
           # Checks to make sure there isn't already an album with this name, then creates one if there isn't
           TopAlbum.where(title: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"]) == []
-            puts "second album create"
             @album = TopAlbum.create(
             title: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"],
-            # artist_id: @artist.id
+            # need to add artist_id to this create statement
           )
         else
+          # Looks for album with name and gives it appropriate updated play count depending on which array we're on
           @album = TopAlbum.where(title: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"])
           if fetchesFetched == 0
             @album.update(
@@ -77,7 +76,6 @@ class TopAlbumsController < ApplicationController
           )
           end
         end
-          p totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"]
       y += 1
       end
       fetchesFetched += 1
@@ -94,18 +92,6 @@ class TopAlbumsController < ApplicationController
         format.json { render :show, status: :created, location: @top_album }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @top_album.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  def update
-    respond_to do |format|
-      if @top_album.update(top_album_params)
-        format.html { redirect_to @top_album, notice: "Get top album was successfully updated." }
-        format.json { render :show, status: :ok, location: @top_album }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @top_album.errors, status: :unprocessable_entity }
       end
     end
