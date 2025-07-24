@@ -14,72 +14,78 @@ class TopAlbumsController < ApplicationController
   end
 
   def edit
-    totalFetchArray = []
+    fetchArray = []
     fetchOverall = LastfmFetcher.get_album_data("Frogdunker", "overall")
-    totalFetchArray.push(fetchOverall)
+    fetchArray.push(fetchOverall)
     fetchOneWeek = LastfmFetcher.get_album_data("Frogdunker", "7day")
-    totalFetchArray.push(fetchOneWeek)
+    fetchArray.push(fetchOneWeek)
     fetchOneMonth = LastfmFetcher.get_album_data("Frogdunker", "1month")
-    totalFetchArray.push(fetchOneMonth)
+    fetchArray.push(fetchOneMonth)
     fetchThreeMonth = LastfmFetcher.get_album_data("Frogdunker", "3month")
-    totalFetchArray.push(fetchThreeMonth)
+    fetchArray.push(fetchThreeMonth)
     fetchSixMonth = LastfmFetcher.get_album_data("Frogdunker", "6month")
-    totalFetchArray.push(fetchSixMonth)
+    fetchArray.push(fetchSixMonth)
     fetchTwelveMonth = LastfmFetcher.get_album_data("Frogdunker", "12month")
-    totalFetchArray.push(fetchTwelveMonth)
+    fetchArray.push(fetchTwelveMonth)
     y = 0
-    fetchesFetched = 0
+    fetches = 0
     # this loop checks for artists to see if they're already in database and creates an Artist row if they're not
-    while fetchesFetched < totalFetchArray.length
-      while y < totalFetchArray[fetchesFetched]["topalbums"]["album"].length
-        if Artist.where(name: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["artist"]["name"]) == []
+    # cycles through each item in the fetch array, which are the album data fetches for each timeframe ("period" in the API)
+    while fetches < fetchArray.length
+      # loops through each album returned from an API fetch ("limit" in the API, default is 50)
+      while y < fetchArray[fetches]["topalbums"]["album"].length
+        dataInstance = fetchArray[fetches]["topalbums"]["album"][y]
+        @artist = Artist.where(name: dataInstance["artist"]["name"])
+        @album = TopAlbum.where(title: dataInstance["name"])
+        # creates a new album AND a new artist if the artist is not currently in the database
+        if @artist == []
           @artist = Artist.create(
-            name: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["artist"]["name"]
+            name: dataInstance["artist"]["name"]
           )
             @album = TopAlbum.create(
-            title: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"],
+            title: dataInstance["name"],
             artist_id: @artist.id
           )
         elsif
-          # Checks to make sure there isn't already an album with this name, then creates one if there isn't
-          TopAlbum.where(title: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"]) == []
+          # creates a new album (no new artist) if the artist name exists but the album name doesn't
+          @album == []
             @album = TopAlbum.create(
-            title: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"],
-            # artist_id: @artist.id
+            title: dataInstance["name"],
+            artist_id: Artist.find_by(name: dataInstance["artist"]["name"]).id
             # need to add artist_id to this create statement
           )
         else
           # Looks for album with name and gives it appropriate updated play count depending on which array we're on
-          @album = TopAlbum.where(title: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["name"])
-          if fetchesFetched == 0
+          @album = TopAlbum.where(title: dataInstance["name"])
+          if fetches == 0
             @album.update(
-            play_count_total: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["playcount"]
+            play_count_total: dataInstance["playcount"]
           )
-          elsif fetchesFetched == 1
+          elsif fetches == 1
             @album.update(
-            one_week: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["playcount"]
+            one_week: dataInstance["playcount"]
           )
-          elsif fetchesFetched == 2
+          elsif fetches == 2
             @album.update(
-            one_month: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["playcount"]
+            one_month: dataInstance["playcount"]
           )
-          elsif fetchesFetched == 3
+          elsif fetches == 3
             @album.update(
-            three_month: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["playcount"]
+            three_month: dataInstance["playcount"]
           )
-          elsif fetchesFetched == 4
+          elsif fetches == 4
             @album.update(
-            six_month: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["playcount"]
+            six_month: dataInstance["playcount"]
           )
-          elsif fetchesFetched == 5
+          elsif fetches == 5
             @album.update(
-            twelve_month: totalFetchArray[fetchesFetched]["topalbums"]["album"][y]["playcount"]
+            twelve_month: dataInstance["playcount"]
           )
           end
         end
       y += 1
       end
-      fetchesFetched += 1
+      fetches += 1
       y = 0
     end
   end
