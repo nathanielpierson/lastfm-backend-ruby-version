@@ -1,4 +1,4 @@
 class TopAlbum < ApplicationRecord
-  # belongs_to :artist
+  belongs_to :artist
   validates :title, uniqueness: true
 end

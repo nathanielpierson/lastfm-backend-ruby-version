@@ -33,6 +33,7 @@ class TopAlbumsController < ApplicationController
     # cycles through each item in the fetch array, which are the album data fetches for each timeframe ("period" in the API)
     while fetches < fetchArray.length
       # loops through each album returned from an API fetch ("limit" in the API, default is 50)
+      y = 0
       while y < fetchArray[fetches]["topalbums"]["album"].length
         dataInstance = fetchArray[fetches]["topalbums"]["album"][y]
         @artist = Artist.where(name: dataInstance["artist"]["name"])
