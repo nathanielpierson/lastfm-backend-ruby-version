@@ -1,1 +1,1 @@
-Note: This is depricated as I am exlusively using the node.js version of this going forward. Here is that [repository]([url](https://github.com/nathanielpierson/lastfm-backend-node-version)) for more information.
+Note: This is depricated as I am exlusively using the node.js version of this going forward. Here is that repository for more information: https://github.com/nathanielpierson/lastfm-backend-node-version
